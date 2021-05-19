@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,6 +17,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import {
   Header,
@@ -29,10 +30,15 @@ import {
 declare const global: {HermesInternal: null | {}};
 
 const App = () => {
+  const [tabVAlue,setTabVAlue] = useState(0)
   return (
     <>
       <StatusBar barStyle="dark-content" />
+      <TouchableOpacity onPress={()=>setTabVAlue(3)}>
+        <Text>change value</Text>
+      </TouchableOpacity>
       <SafeAreaView>
+        {tabVAlue == 3 ?
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
@@ -71,6 +77,11 @@ const App = () => {
             <LearnMoreLinks />
           </View>
         </ScrollView>
+      :
+      <View>
+        <Text>Hiiii</Text>
+      </View>  
+      }
       </SafeAreaView>
     </>
   );
