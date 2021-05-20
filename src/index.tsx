@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { StatusBar, Text, TouchableOpacity, View, TextInput, ActivityIndicator, StyleSheet ,Alert} from 'react-native';
+import { StatusBar, Text, TouchableOpacity, View, TextInput, ActivityIndicator, StyleSheet, Alert, ScrollView } from 'react-native';
 
 import { Provider } from 'src/provider';
 import { Colors } from 'src/constants';
 import { createResource } from '../WebApiServices/SimpleApiCalls'
-import { user_register ,user_login} from '../WebApiServices/WebServices'
+import { user_register, user_login } from '../WebApiServices/WebServices'
 import { Screens } from 'src/screens';
+// import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props { }
 
@@ -28,15 +29,29 @@ export const App: React.FC<Props> = () => {
     try {
       let res = await createResource(user_register, data);
       console.log(res, 'resresres');
-      setisLoading(false)
-      setTabVAlue(1)
+
       // navigation.navigate('Login');
+      if (res.data.message == 'Created Successfully') {
+        setisLoading(false)
+        setTabVAlue(0)
+        setEmail('')
+        setPassword('')
+      } else {
+        Alert.alert(
+          "Error",
+          'Error, User not created',
+        );
+        setisLoading(false)
+
+      }
+
     } catch (error) {
       Alert.alert(
         "Error",
-        error.response.data.message,
+        error.response.data || 'Error',
       );
       setisLoading(false)
+      console.log(error, 'error', '*******************')
       // alert(error);
     }
   }
@@ -52,8 +67,12 @@ export const App: React.FC<Props> = () => {
     try {
       let res = await createResource(user_login, data)
       console.log(res, 'resresres');
-      setTabVAlue(0)
+      setTabVAlue(3)
       setisLoading(false)
+      // Alert.alert(
+      //   "Error",
+      //   JSON.stringify(res)
+      // );
     } catch (error) {
       setisLoading(false)
       console.log(error.response.data.message, 'error');
@@ -78,7 +97,7 @@ export const App: React.FC<Props> = () => {
               backgroundColor="transparent"
               barStyle="light-content"
             />
-            <Screens />
+            <Screens  />
           </>
           : tabVAlue == 0 ?
             <View style={styles.container}>
@@ -110,29 +129,29 @@ export const App: React.FC<Props> = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            :tabVAlue == 1 ?
-            <View style={styles.container}>
-              <Text style={styles.heading}>Sign Up</Text>
-              <View>
-                <TextInput style={styles.input} placeholder="First Name" value={firstname} onChangeText={(val) => setFirstName(val)} />
-                <TextInput style={styles.input} placeholder="Last Name" value={lastName} onChangeText={(val) => setLastName(val)} />
-                <TextInput style={styles.input} placeholder="User Name" value={userName} onChangeText={(val) => setUserName(val)} />
-                <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={(val) => setEmail(val)} />
-                <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={(val) => setPassword(val)} />
-                {!isLoading ? <TouchableOpacity style={{ backgroundColor: Colors.primary, paddingVertical: 8, width: '100%', alignSelf: 'center', borderRadius: 5, alignItems: 'center' }} onPress={_ =>onRegister() }>
-                  <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}> Sign Up</Text>
-                </TouchableOpacity>
-                  :
-                  <ActivityIndicator size="large" color="#fff" />
+            : tabVAlue == 1 ?
+              <ScrollView style={styles.container}>
+                <Text style={styles.heading}>Sign Up</Text>
+                <View>
+                  <TextInput style={styles.input} placeholder="First Name" value={firstname} onChangeText={(val) => setFirstName(val)} />
+                  <TextInput style={styles.input} placeholder="Last Name" value={lastName} onChangeText={(val) => setLastName(val)} />
+                  <TextInput style={styles.input} placeholder="User Name" value={userName} onChangeText={(val) => setUserName(val)} />
+                  <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={(val) => setEmail(val)} />
+                  <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={(val) => setPassword(val)} />
+                  {!isLoading ? <TouchableOpacity style={{ backgroundColor: Colors.primary, paddingVertical: 8, width: '100%', alignSelf: 'center', borderRadius: 5, alignItems: 'center' }} onPress={_ => onRegister()}>
+                    <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}> Sign Up</Text>
+                  </TouchableOpacity>
+                    :
+                    <ActivityIndicator size="large" color="#fff" />
 
-                }
-                <TouchableOpacity onPress={_ => setTabVAlue(0)}>
-                  <Text style={styles.text}  >Already have an account?? Back to Login</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            :
-            null
+                  }
+                  <TouchableOpacity onPress={_ => setTabVAlue(0)}>
+                    <Text style={styles.text}  >Already have an account?? Back to Login</Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+              :
+              null
 
 
       }

@@ -80,7 +80,7 @@ export const Player = () => {
   });
 
   return (
-    <Context.Provider value={{ percent }}>
+    <Context.Provider value={{ percent  }}>
       <Animated.View style={[styles.container, style]}>
         <Handle {...{ gestureHandler }} />
         <Position />

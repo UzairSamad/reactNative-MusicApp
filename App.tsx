@@ -30,13 +30,11 @@ import {
 declare const global: {HermesInternal: null | {}};
 
 const App = () => {
-  const [tabVAlue,setTabVAlue] = useState(0)
+  const [tabVAlue,setTabVAlue] = useState(3)
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <TouchableOpacity onPress={()=>setTabVAlue(3)}>
-        <Text>change value</Text>
-      </TouchableOpacity>
+   
       <SafeAreaView>
         {tabVAlue == 3 ?
         <ScrollView
